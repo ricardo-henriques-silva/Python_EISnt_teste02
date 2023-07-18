@@ -24,15 +24,17 @@ class SimuladorFutebol(tk.Tk):
 
     # Inicialização dos pontos no arranque da época
         self.pontos=0
+        self.jogos=0
 
     # Definição do dicionário equipa
-        self.equipa = {"nome": self.nome_equipa, "jogadores": [], "saldo": self.saldo, "formacao_tactica": self.formacao_tactica, "pontos": self.pontos }
+        self.equipa = {"nome": self.nome_equipa, "jogadores": [], "saldo": self.saldo, "formacao_tactica": self.formacao_tactica, "pontos": self.pontos, "jogos": self.jogos }
         print(self.equipa)
         
     # Labels das variáveis da equipa
         self.labelnome = tk.Label(self, textvariable=self.nome_equipa).pack()
         self.labelsaldo = tk.Label(self, textvariable=str(self.saldo)).pack()
         self.labeltactica = tk.Label(self, textvariable=self.formacao_tactica).pack()
+
 
     # Botões de configuração das variáveia da equipa
         tk.Button(self, text="Alterar nome da equipa", command=self.alterar_nome_equipa).pack()
@@ -58,12 +60,18 @@ class SimuladorFutebol(tk.Tk):
     
     # Função de simulação de jogo
     def simular_jogo(self):
+        self.jogos += 1
         resultado = random.choice(['Vitória', 'Derrota', 'Empate'])
         if resultado == 'Vitória':
-            self.pontos = self.pontos + 3
+            self.pontos += 3
         elif resultado == 'Empate':
-            self.pontos = self.pontos + 1
-        tk.Label(self, text=f"Resultado do jogo: {resultado} | Pontos: {self.pontos}").pack()
+            self.pontos += 1
+        racio = self.calculodesempenho()
+        tk.Label(self, text=f"Resultado do jogo {self.jogos} : {resultado} | Pontos: {self.pontos} (racio: {racio} %)").pack()
+
+    # Funções de calculo de desempenho da equipa
+    def calculodesempenho(self):
+        return round(100*self.pontos/self.jogos/3,0) # calcula a percentagem de pontos obtidos / possíveis, arredondada à unidade
 
 if __name__ == '__main__':
     app = SimuladorFutebol()
